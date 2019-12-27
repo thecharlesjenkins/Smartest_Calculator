@@ -10,11 +10,11 @@ abstract class Field extends Widget {
 }
 
 class InputField {
-  static final precision = IntegerTextField(
-      UniqueKey(), TextEditingController(), TextInputType.number, Bloc<int>());
+  static final precision = IntegerTextField(UniqueKey(),
+      TextEditingController(), TextInputType.number, Bloc<int>.seeded(5));
   static final decimal = DecimalTextField(
       UniqueKey(),
       TextEditingController(),
       TextInputType.numberWithOptions(decimal: true, signed: true),
-      Bloc<Decimal>());
+      Bloc<Decimal>.seeded(Decimal.zero));
 }

@@ -1,15 +1,25 @@
 import 'dart:async';
 
-class Bloc<T> {
-  final StreamController<T> controller = StreamController<T>.broadcast();
+import 'package:rxdart/subjects.dart';
 
-  Stream<T> get getInput => controller.stream.asBroadcastStream();
+class Bloc<T> {
+  Stream<T> get getInput => _controller.stream;
+
+  BehaviorSubject<T> get subject => _controller;
+
+  BehaviorSubject<T> _controller = BehaviorSubject<T>();
+
+  Bloc();
+
+  Bloc.seeded(T seed) : assert(seed != null) {
+    _controller = BehaviorSubject.seeded(seed);
+  }
 
   void update(T input) {
-    controller.sink.add(input);
+    _controller.sink.add(input);
   }
 
   void dispose() {
-    controller.close();
+    _controller.close();
   }
 }

@@ -1,13 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:smartest_calculator/blocs/bloc.dart';
-import 'package:smartest_calculator/ui/input_fields.dart';
 import 'package:smartest_calculator/utils/formatting/output_formatting.dart';
 import 'package:smartest_calculator/utils/input.dart';
 import 'package:smartest_calculator/utils/output_display.dart';
 
-abstract class Algorithm {
+abstract class Algorithm<T extends GeneralInput> {
   String get title;
 
   ColorSwatch get color;
@@ -18,13 +16,11 @@ abstract class Algorithm {
 
   OutputFormatting get outputFormatting;
 
-  Input get previousInput;
+  T get previousInput;
 
-  List<Field> get fields;
-
-  Bloc<OutputDisplay> get bloc;
+  T get inputs;
 
   bool selected = false;
 
-  void computeFunction(Input input);
+  Stream<OutputDisplay> computeFunction(T input);
 }

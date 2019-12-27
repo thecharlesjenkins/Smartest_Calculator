@@ -1,12 +1,11 @@
 import 'package:decimal/decimal.dart';
 import 'package:smartest_calculator/blocs/bloc.dart';
+import 'package:smartest_calculator/functions/algorithms/maclaurin/maclaurin.dart';
 import 'package:smartest_calculator/utils/factorial.dart';
 import 'package:smartest_calculator/utils/formatting/output_formatting.dart';
 import 'package:smartest_calculator/utils/series/polynomial.dart';
 import 'package:smartest_calculator/utils/series/term_formatting.dart';
 import 'package:smartest_calculator/utils/series/term_piece.dart';
-
-import 'maclaurin.dart';
 
 class Sine extends Maclaurin {
   Sine(Bloc<Polynomial> poly) : super(poly);

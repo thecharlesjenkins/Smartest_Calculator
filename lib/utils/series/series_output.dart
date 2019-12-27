@@ -2,8 +2,7 @@ import 'package:decimal/decimal.dart';
 import 'package:flutter/widgets.dart';
 import 'package:meta/meta.dart';
 import 'package:smartest_calculator/utils/formatting/decimal_formatting.dart';
-
-import 'term_formatting.dart';
+import 'package:smartest_calculator/utils/series/term_formatting.dart';
 
 @immutable
 class SeriesOutput {

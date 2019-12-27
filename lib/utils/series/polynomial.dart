@@ -1,10 +1,9 @@
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
+import 'package:smartest_calculator/utils/formatting/result_display.dart';
+import 'package:smartest_calculator/utils/output_display.dart';
+import 'package:smartest_calculator/utils/series/series_output.dart';
 import 'package:smartest_calculator/utils/series/term_formatting.dart';
-
-import '../formatting/result_display.dart';
-import '../output_display.dart';
-import 'series_output.dart';
 
 class Polynomial extends OutputDisplay<List<SeriesOutput>, Decimal> {
   List<SeriesOutput> output = List<SeriesOutput>();

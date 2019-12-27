@@ -6,7 +6,6 @@ import 'package:smartest_calculator/utils/injector_widget.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return InjectorWidget(
@@ -39,9 +38,7 @@ class MainDisplay extends StatelessWidget {
       children: <Widget>[
         Padding(
           padding: EdgeInsets.all(8.0),
-          child: FunctionDisplay(
-            InjectorWidget.of(context).algorithmBloc,
-          ),
+          child: FunctionDisplay(),
         ),
         FunctionList()
       ],

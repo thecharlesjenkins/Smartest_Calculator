@@ -3,68 +3,50 @@ import 'dart:async';
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:smartest_calculator/blocs/bloc.dart';
-import 'package:smartest_calculator/ui/input_fields.dart';
+import 'package:smartest_calculator/functions/algorithms/base_algorithm.dart';
 import 'package:smartest_calculator/utils/factorial.dart';
 import 'package:smartest_calculator/utils/formatting/decimal_formatting.dart';
 import 'package:smartest_calculator/utils/input.dart';
-import 'package:smartest_calculator/utils/series/series_output.dart';
 import 'package:smartest_calculator/utils/series/polynomial.dart';
+import 'package:smartest_calculator/utils/series/series_output.dart';
 
-import '../base_algorithm.dart';
-
-abstract class Maclaurin implements Algorithm {
+abstract class Maclaurin implements Algorithm<AlgorithmInput> {
   ColorSwatch get color =>
       ColorSwatch(Colors.blue.value, {'appBar': Colors.blue[800]});
 
-  Polynomial polynomial;
+  Polynomial _polynomial;
 
-  Input previousInput = Input(Decimal.zero, 0);
+  AlgorithmInput previousInput;
 
-  Bloc<Polynomial> bloc;
+  AlgorithmInput _fields;
 
-  List<Field> get fields => [InputField.decimal, InputField.precision];
+  AlgorithmInput get inputs {
+    if (_fields == null) {
+      _fields = AlgorithmInput();
+    }
+    return _fields;
+  }
 
   Maclaurin(Bloc<Polynomial> poly) {
-    bloc = poly;
-    polynomial = Polynomial(outputFormatting);
-    precisionListener(fields[1].bloc.getInput);
-    decimalListener(fields[0].bloc.getInput);
+    _polynomial = Polynomial(outputFormatting);
   }
 
-  void precisionListener(Stream<int> precision) {
-    precision.listen((integer) {
-      if (integer != previousInput.precision) {
-        computeFunction(Input(previousInput.input, integer));
-      }
-    });
+  Stream<Polynomial> computeFunction(AlgorithmInput input) {
+    return _getTerms(input);
   }
 
-  void decimalListener(Stream<Decimal> decimal) {
-    decimal.listen((input) {
-      if (input != previousInput.input) {
-        polynomial = Polynomial(outputFormatting);
-        computeFunction(Input(input, previousInput.precision));
-      }
-    });
-  }
-
-  @protected
-  void computeFunction(Input input) {
-    _getTerms(input);
-  }
-
-  void _getTerms(Input input) {
+  Stream<Polynomial> _getTerms(AlgorithmInput input) async* {
     int n = 0;
     Decimal decimalPrecision = toDecimalPrecision(input.precision);
     Decimal summation = Decimal.zero;
     Decimal error;
-    if (input.input == previousInput.input) {
+    if (previousInput != null && input.input == previousInput.input) {
       if (input.precision < previousInput.precision) {
-        bloc.update(polynomial.polynomialOfLowerPrecision(input.precision));
+        yield _polynomial.polynomialOfLowerPrecision(input.precision);
         return;
       } else if (input.precision > previousInput.precision) {
-        n = polynomial.output.length;
-        summation = polynomial.currentResult;
+        n = _polynomial.output.length;
+        summation = _polynomial.currentResult;
       }
     }
     while (decimalPrecision < (error = errorBound(input.input, n))) {
@@ -76,10 +58,11 @@ abstract class Maclaurin implements Algorithm {
           termFormatting: outputFormatting,
           x: input.input,
           calculationNumber: n);
-      polynomial.addOutput(newOutput);
-      bloc.update(polynomial);
+      _polynomial.addOutput(newOutput);
+      yield _polynomial;
       n++;
     }
+
     previousInput = input;
   }
 
@@ -92,5 +75,5 @@ abstract class Maclaurin implements Algorithm {
   }
 
   @override
-  String toString() => polynomial.toString();
+  String toString() => _polynomial.toString();
 }

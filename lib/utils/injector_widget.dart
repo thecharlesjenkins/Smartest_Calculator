@@ -1,9 +1,8 @@
 import 'package:flutter/widgets.dart';
-import 'package:smartest_calculator/blocs/bloc.dart';
-import 'package:smartest_calculator/functions/algorithms/base_algorithm.dart';
+import 'package:smartest_calculator/blocs/algorithm_bloc.dart';
 
 class InjectorWidget extends InheritedWidget {
-  final Bloc<Algorithm> algorithmBloc = Bloc<Algorithm>();
+  final AlgorithmBloc algorithmBloc = AlgorithmBloc();
 
   InjectorWidget({@required Widget child})
       : assert(child != null),
