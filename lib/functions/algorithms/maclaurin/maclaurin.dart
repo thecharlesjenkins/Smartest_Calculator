@@ -24,8 +24,8 @@ abstract class Maclaurin implements Algorithm {
 
   List<Field> get fields => [InputField.decimal, InputField.precision];
 
-  Maclaurin(Bloc<Polynomial> poly) {
-    bloc = poly;
+  Maclaurin() {
+    bloc = Bloc<Polynomial>();
     polynomial = Polynomial(outputFormatting);
     precisionListener(fields[1].bloc.getInput);
     decimalListener(fields[0].bloc.getInput);

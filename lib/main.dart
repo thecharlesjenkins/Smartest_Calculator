@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:smartest_calculator/ui/function_display.dart';
 import 'package:smartest_calculator/ui/function_list.dart';
 import 'package:smartest_calculator/utils/injector_widget.dart';
+import 'package:smartest_calculator/utils/series/polynomial.dart';
 
 void main() => runApp(MyApp());
 
@@ -35,15 +36,18 @@ class MainDisplay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: ListView(
+        body: Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
-        Padding(
-          padding: EdgeInsets.all(8.0),
-          child: FunctionDisplay(
-            InjectorWidget.of(context).algorithmBloc,
+        Expanded(
+          child: OutlinedContainer(
+            child: FunctionDisplay(
+              InjectorWidget.of(context).algorithmBloc,
+            ),
           ),
         ),
-        FunctionList()
+        OutlinedContainer(child: FunctionList())
       ],
     ));
   }

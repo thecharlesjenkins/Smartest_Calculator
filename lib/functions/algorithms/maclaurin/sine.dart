@@ -9,8 +9,6 @@ import 'package:smartest_calculator/utils/series/term_piece.dart';
 import 'maclaurin.dart';
 
 class Sine extends Maclaurin {
-  Sine(Bloc<Polynomial> poly) : super(poly);
-
   @override
   OutputFormatting get outputFormatting {
     return TermFormatting(
