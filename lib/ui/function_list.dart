@@ -1,12 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:smartest_calculator/blocs/bloc.dart';
 import 'package:smartest_calculator/functions/algorithms/base_algorithm.dart';
 import 'package:smartest_calculator/functions/algorithms/maclaurin/sine.dart';
 import 'package:smartest_calculator/utils/injector_widget.dart';
-import 'package:smartest_calculator/utils/series/polynomial.dart';
 
-final List<Algorithm> list = [Sine(Bloc<Polynomial>())];
+final List<Algorithm> list = [Sine()];
 
 class FunctionList extends StatefulWidget {
   @override
@@ -41,7 +39,10 @@ class _FunctionListState extends State<FunctionList>
   }
 
   void addToBloc(Algorithm algorithm) {
-    InjectorWidget.of(context).algorithmBloc.update(algorithm);
+    InjectorWidget.of(context)
+        .resultBloc
+        .updateAlgorithm(algorithm.computeFunction, algorithm.initialInput);
+    InjectorWidget.of(context).unifiedBloc.update(algorithm);
   }
 
   @override

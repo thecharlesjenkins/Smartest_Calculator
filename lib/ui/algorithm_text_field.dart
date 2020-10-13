@@ -1,22 +1,20 @@
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:smartest_calculator/blocs/bloc.dart';
-import 'package:smartest_calculator/ui/input_fields.dart';
 import 'package:smartest_calculator/utils/decimal_extensions.dart';
+import 'package:smartest_calculator/utils/injector_widget.dart';
 
-class AlgorithmTextField<T> extends TextField implements Field {
+abstract class AlgorithmTextField<T> extends TextField {
   final TextEditingController controller;
-  final Bloc<T> bloc;
-  final key;
+  final BuildContext context;
+  final String id;
 
   AlgorithmTextField(
-      this.key, this.controller, TextInputType keyboardType, this.bloc)
+      this.id, this.controller, TextInputType keyboardType, this.context)
       : super(
-            key: key,
             controller: controller,
             inputFormatters: [
-              WhitelistingTextInputFormatter(RegExp("^([0-9]+(\.[0-9]+)?)"))
+              FilteringTextInputFormatter.allow(RegExp("^([0-9])|(\.)"))
             ],
             textInputAction: TextInputAction.done,
             keyboardType: keyboardType,
@@ -28,31 +26,26 @@ class AlgorithmTextField<T> extends TextField implements Field {
   }
 
   void _fieldListener() {
-    if (controller.value.text != "") {
-      addToBloc(controller.value.text);
+    if (controller.value != null) {
+      InjectorWidget.of(context)
+          .resultBloc
+          .updateInput(id, convertText(controller.value.text));
     }
   }
 
-  void addToBloc(String str) {
-    bloc.update(controller.value.text as T);
-  }
+  T convertText(String str);
 }
 
 class DecimalTextField extends AlgorithmTextField<Decimal> {
-  DecimalTextField(Key key, TextEditingController controller,
-      TextInputType keyboardType, Bloc<Decimal> bloc)
-      : super(key, controller, keyboardType, bloc);
+  DecimalTextField(String id, BuildContext context)
+      : super(id, TextEditingController(), TextInputType.number, context);
 
-  @override
-  void addToBloc(String str) =>
-      bloc.update(Parsing.parseDouble(double.parse(str)));
+  Decimal convertText(String str) => Parsing.parseDouble(double.parse(str));
 }
 
 class IntegerTextField extends AlgorithmTextField<int> {
-  IntegerTextField(Key key, TextEditingController controller,
-      TextInputType keyboardType, Bloc<int> bloc)
-      : super(key, controller, keyboardType, bloc);
+  IntegerTextField(String id, BuildContext context)
+      : super(id, TextEditingController(), TextInputType.number, context);
 
-  @override
-  void addToBloc(String str) => bloc.update(int.parse(str));
+  int convertText(String str) => int.parse(str);
 }

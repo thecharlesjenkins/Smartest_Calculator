@@ -29,7 +29,7 @@ class Fraction extends StatelessWidget {
   }
 
   @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.debug}) {
+  String toStringShort() {
     return "$_numerator / $_denominator";
   }
 }

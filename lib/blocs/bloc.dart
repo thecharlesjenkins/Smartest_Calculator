@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:rxdart/subjects.dart';
 
-class Bloc<T> {
-  Stream<T> get getInput => _controller.stream;
+abstract class Bloc<T, V> {
+  Stream<V> get getOutput => subject.map((event) => event as V);
 
   BehaviorSubject<T> get subject => _controller;
 
@@ -16,7 +16,7 @@ class Bloc<T> {
   }
 
   void update(T input) {
-    _controller.sink.add(input);
+    subject.sink.add(input);
   }
 
   void dispose() {
